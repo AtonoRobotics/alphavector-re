@@ -5,6 +5,11 @@ export { ACTION_CLASS_VERBS } from "./verbs.js";
 export { POLICY } from "./policy.js";
 export { CONNECTORS } from "./connectors.js";
 export { RECORD_PARTY_KNOWLEDGE, PROPERTY_IS_NOT_LISTING } from "./kinds.js";
+export {
+  WRITTEN_GRAPH_PREDICATES,
+  evaluateDeclaredPredicates,
+} from "./predicates.js";
+export type { WrittenGraphPredicate, PredicateDecision } from "./predicates.js";
 export { EVIDENCE_EVAL_FIXTURES } from "./evidence.js";
 export { ASK_CEILINGS } from "./ask.js";
 export { FIELD_LANGUAGE_MAP, FORBIDDEN_FIELD_LANGUAGE_KEYS } from "./language.js";

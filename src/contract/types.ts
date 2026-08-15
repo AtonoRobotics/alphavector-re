@@ -33,7 +33,18 @@ export interface RoleBinding {
   isOrchestrator?: boolean;
 }
 
-export interface JourneyKindBinding {
+/**
+ * Written pack-graph predicates a journey or action binding MAY declare
+ * (DEC-026 / D08 / rev-1.1/03). This slice binds these three only.
+ * LIKED / REJECTED and other written edges are not merged in here.
+ */
+export interface PredicateDeclaration {
+  REQUIRES?: string[];
+  PREFERS?: string[];
+  AVOIDS?: string[];
+}
+
+export interface JourneyKindBinding extends PredicateDeclaration {
   id: string;
   label: string;
 }
@@ -45,7 +56,7 @@ export type ActionCeiling =
   | "prohibited"
   | "governance";
 
-export interface ActionClassVerb {
+export interface ActionClassVerb extends PredicateDeclaration {
   id: string;
   label: string;
   externalEffect: boolean;
