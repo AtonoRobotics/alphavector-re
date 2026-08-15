@@ -28,6 +28,46 @@ describe("policy fixtures fail closed", () => {
     expect(decision.reason).toMatch(/fail closed/i);
   });
 
+  it("communicate + channel with unknown purpose fails closed", () => {
+    for (const channel of ["email", "sms"] as const) {
+      const decision = evaluateRules(POLICY, {
+        tenantId: "t1",
+        agentId: "a1",
+        actionClass: "communicate",
+        channel,
+        purpose: "unknown-purpose",
+      });
+      expect(decision.allowed, channel).toBe(false);
+      expect(decision.reason, channel).toMatch(/fail closed/i);
+    }
+  });
+
+  it("communicate + channel with missing purpose fails closed", () => {
+    for (const channel of ["email", "sms"] as const) {
+      const decision = evaluateRules(POLICY, {
+        tenantId: "t1",
+        agentId: "a1",
+        actionClass: "communicate",
+        channel,
+      });
+      expect(decision.allowed, channel).toBe(false);
+      expect(decision.reason, channel).toMatch(/fail closed/i);
+    }
+  });
+
+  it("consented follow-up email and SMS still allow", () => {
+    for (const channel of ["email", "sms"] as const) {
+      const decision = evaluateRules(POLICY, {
+        tenantId: "t1",
+        agentId: "a1",
+        actionClass: "communicate",
+        purpose: "follow-up",
+        channel,
+      });
+      expect(decision.allowed, channel).toBe(true);
+    }
+  });
+
   it("DNC, quiet hours, fair housing, RESPA, Reg B deny", () => {
     const cases = [
       { purpose: "dnc", actionClass: "communicate", channel: "email" },
@@ -62,6 +102,21 @@ describe("policy fixtures fail closed", () => {
       agentId: "a1",
       actionClass: "communicate",
       purpose: "dnc",
+      channel: "email",
+    };
+    const before = evaluateRules(POLICY, req);
+    const after = policySurvivesGraduation(POLICY, req);
+    expect(before.allowed).toBe(false);
+    expect(after.allowed).toBe(false);
+    expect(after.reason).toBe(before.reason);
+  });
+
+  it("graduation does not strip fail-closed communicate purpose", () => {
+    const req = {
+      tenantId: "t1",
+      agentId: "a1",
+      actionClass: "communicate",
+      purpose: "unknown-purpose",
       channel: "email",
     };
     const before = evaluateRules(POLICY, req);
