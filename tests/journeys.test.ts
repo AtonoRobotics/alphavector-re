@@ -7,6 +7,9 @@ describe("five pack journeys", () => {
   it("binds buyer, seller, listing, transaction, past-client", () => {
     expect(JOURNEY_KINDS.map((j) => j.id)).toEqual([...REQUIRED_JOURNEY_IDS]);
     expect(JOURNEY_KINDS).toHaveLength(5);
+    for (const journey of JOURNEY_KINDS) {
+      expect(journey.REQUIRES?.length, journey.id).toBeGreaterThan(0);
+    }
   });
 
   it("loaded pack exposes the five journey kinds", () => {
@@ -22,6 +25,7 @@ describe("five pack journeys", () => {
         "transaction",
         "past-client",
       ]);
+      expect(result.loaded.binding.journeyKinds[0]?.REQUIRES).toEqual(["journey.buyer"]);
     }
   });
 });

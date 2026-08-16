@@ -7,6 +7,34 @@ import type { PredicateDeclaration } from "../contract/types.js";
 export const WRITTEN_GRAPH_PREDICATES = ["REQUIRES", "PREFERS", "AVOIDS"] as const;
 export type WrittenGraphPredicate = (typeof WRITTEN_GRAPH_PREDICATES)[number];
 
+/**
+ * Pack-local condition ids a licensed field agent can record on the existing
+ * fact path. Ids match field-language keys and policy purpose keys where those
+ * already exist. Consent denies use the consent.* namespace (policy consent body).
+ * Not brokerage, counsel, MLS, or tenant-instance data.
+ */
+export const PACK_CONDITIONS = {
+  PURPOSE_FOLLOW_UP: "purpose.follow-up",
+  PURPOSE_SHOWING: "purpose.showing",
+  PURPOSE_LISTING: "purpose.listing",
+  PURPOSE_TRANSACTION: "purpose.transaction",
+  JOURNEY_BUYER: "journey.buyer",
+  JOURNEY_SELLER: "journey.seller",
+  JOURNEY_LISTING: "journey.listing",
+  JOURNEY_TRANSACTION: "journey.transaction",
+  JOURNEY_PAST_CLIENT: "journey.past-client",
+  SUBJECT_LISTING: "subject.listing",
+  SUBJECT_PROPERTY: "subject.property",
+  CONSENT_DNC: "consent.dnc",
+  CONSENT_QUIET_HOURS: "consent.quiet-hours",
+  CONSENT_ASSUMED_AUTONOMY: "consent.assumed-autonomy",
+  CONSENT_RECOVERY: "consent.recovery",
+  CONSENT_CRM_UPDATE: "consent.crm-update",
+  CONSENT_SCHEDULING: "consent.scheduling",
+} as const;
+
+export type PackConditionId = (typeof PACK_CONDITIONS)[keyof typeof PACK_CONDITIONS];
+
 export interface PredicateDecision {
   allowed: boolean;
   reason: string;
