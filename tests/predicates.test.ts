@@ -24,11 +24,21 @@ function verbById(id: string): ActionClassVerb {
 }
 
 function buyerWithPredicates(extra: Partial<JourneyKindBinding> = {}): JourneyKindBinding {
-  return { ...journeyById("buyer"), ...extra };
+  const buyer = journeyById("buyer");
+  return { id: buyer.id, label: buyer.label, ...extra };
 }
 
 function communicateWithPredicates(extra: Partial<ActionClassVerb> = {}): ActionClassVerb {
-  return { ...verbById("communicate"), ...extra };
+  const verb = verbById("communicate");
+  return {
+    id: verb.id,
+    label: verb.label,
+    externalEffect: verb.externalEffect,
+    startRequiresAuthorization: verb.startRequiresAuthorization,
+    mayGraduate: verb.mayGraduate,
+    ceiling: verb.ceiling,
+    ...extra,
+  };
 }
 
 /** Journey plus its communicate binding — the authored field progress step. */
